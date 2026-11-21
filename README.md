@@ -15,3 +15,18 @@ The key to writing good computer programs (i.e., code) is to plan out the proces
 Once you do write code, add comments to each line to indicate what is being accomplished in that line.
 
 Click the terminal in the codespace and type `pytest` to test your code.
+
+## Assistant ManagePro
+
+The optional web assistant runs locally in your browser. Install the project
+dependencies, set your Anthropic API key in PowerShell, then start the server:
+
+```powershell
+python -m pip install requests
+$env:ANTHROPIC_API_KEY = "your-key"
+python web_app.py
+```
+
+The app opens at `http://127.0.0.1:8000`. Keep the terminal window open while
+using it; press `Ctrl+C` there to stop the server. The API key stays in the
+Python process and should not be added to the HTML or committed to the repository.

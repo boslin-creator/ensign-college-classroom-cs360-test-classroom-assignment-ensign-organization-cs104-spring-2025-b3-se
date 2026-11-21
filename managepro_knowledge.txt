@@ -1,0 +1,105 @@
+MANAGEPRO — DOCUMENTATION FOURNIE
+
+Cette documentation rassemble deux descriptions de ManagePro. Elles ne sont pas
+entièrement cohérentes. La première décrit un prototype et ses règles détaillées;
+la seconde mêle des fonctions présentées comme disponibles et des éléments d'un
+cahier des charges. Ne pas traiter les différences ci-dessous comme résolues.
+
+FONCTIONNEMENT DÉCRIT DANS LE GUIDE DÉTAILLÉ
+
+Général
+- Prototype pour une seule personne, sans compte utilisateur.
+- Les données restent dans le navigateur et sur l'appareil utilisé. Elles ne
+  sont ni partagées ni synchronisées; vider les données du navigateur les efface.
+- Les montants sont affichés en FCFA dans cette description.
+- Le thème peut suivre l'appareil ou être changé avec le bouton clair/sombre.
+- Sur téléphone, la navigation se trouve en bas de l'écran.
+- « Tout effacer » supprime projets, tâches, équipes et opérations financières;
+  il faut confirmer deux fois.
+
+Tableau de bord
+- Le solde correspond aux revenus moins les dépenses, toutes opérations confondues.
+- Les totaux revenus et dépenses proviennent des opérations de Finances.
+- Les tâches en retard ne sont pas terminées et ont dépassé leur date de fin.
+- Pour chaque projet, la barre compare les dépenses au budget et devient rouge
+  au-delà de 100 %. Les dépenses du projet sont ses opérations de dépense;
+  son résultat est revenus moins dépenses. L'avancement est la moyenne de celui
+  de ses tâches.
+
+Finances
+- Une opération comporte un libellé, un montant supérieur à zéro, un type
+  (dépense ou revenu), un projet facultatif et une date.
+- La liste va de la plus récente à la plus ancienne; les revenus sont verts et
+  les dépenses rouges.
+- Une opération ne se modifie pas : il faut la supprimer et la recréer.
+- Une opération sans projet compte dans le solde général, mais pas dans un projet.
+
+Projets et tâches
+- Un projet a un nom et peut avoir un budget.
+- Les tâches ont trois vues : Gantt, Kanban et liste.
+- Dans le Kanban, déplacer une carte change son statut; la terminer met son
+  avancement à 100 %. Sur téléphone, utiliser la fiche si le glisser-déposer
+  ne fonctionne pas.
+- Ajouter une tâche crée « Nouvelle tâche », avec un début aujourd'hui et une
+  fin dans sept jours, puis ouvre sa modification.
+- La fiche d'une tâche a cinq onglets : Détails (titre obligatoire,
+  description, statut, priorité); Assignation (équipe et responsable en texte
+  libre); Planning (dates et avancement de 0 à 100 %, fin au plus tôt au début);
+  Budget (budget prévu et coût réel, informatifs); Historique (lecture seule).
+- Changer d'onglet sans enregistrer abandonne les changements de l'onglet.
+- La suppression d'une tâche agit immédiatement.
+- Supprimer un projet après deux confirmations supprime aussi ses tâches,
+  équipes et opérations financières.
+- Le Gantt affiche une barre par tâche, des repères hebdomadaires, l'avancement
+  en partie claire et une ligne rouge pour aujourd'hui. Cliquer une barre ouvre
+  la tâche.
+
+Équipes et rôles
+- Une équipe est liée à un projet et s'affiche « Nom · Projet ».
+- Un même nom d'équipe peut exister dans des projets différents, mais pas deux
+  fois dans le même projet (sans distinction majuscules/minuscules).
+- Les équipes sont regroupées par projet et filtrables. Les membres ont un nom
+  et un rôle; un nouveau rôle saisi peut être ajouté à la liste.
+- Modifier le projet d'une équipe détache les tâches qui lui étaient assignées.
+- Supprimer une équipe conserve ses tâches, sans équipe assignée.
+- Les rôles prédéfinis sont regroupés par catégories. Un rôle personnalisé a
+  un nom, un niveau d'accès (Lecteur, Membre ou Gestionnaire) et un taux
+  journalier facultatif. Il ne peut pas être supprimé s'il est utilisé.
+- Le niveau d'accès et le taux journalier ne sont pas exploités : sans comptes,
+  il n'y a pas de permissions réelles et le coût des équipes n'est pas calculé.
+
+LIMITES SIGNALÉES DANS LE GUIDE DÉTAILLÉ
+- Pas de comptes, de partage, de modification d'opération financière, de
+  dépendances entre tâches dans le Gantt, de factures PDF, d'export Excel/CSV
+  ni de sauvegarde en ligne.
+
+AUTRE DESCRIPTION / CAHIER DES CHARGES FOURNI
+- Le tableau de bord est aussi décrit avec des alertes de stock bas et un
+  graphique budget prévu contre dépensé.
+- Les projets sont décrits avec dates, chef de projet, équipe, statut (dont
+  « En retard » calculé automatiquement) et avancement de 0 à 100 %.
+- Les tâches sont aussi décrites avec commentaires, priorité Urgent/Normal/Faible
+  et rappels visibles sur le tableau de bord.
+- Le budget est décrit avec une alerte à partir de 80 % dépensé et un rapport
+  exportable en PDF.
+- Le stock est décrit avec produits, entrées/sorties, seuil bas, lien avec un
+  projet et historique de qui a pris quoi et quand.
+- L'équipe est aussi décrite avec rôle et téléphone; un sélecteur de rôle
+  (Admin, Chef de projet, Employé ou Comptable) permettrait de tester ce que
+  chaque rôle voit.
+- Cette description indique aussi que les montants sont disponibles dans
+  plusieurs monnaies.
+- Les limites mentionnées comprennent l'absence de base partagée et de comptes,
+  de pièces jointes (photos/documents), de rappels par SMS/WhatsApp/e-mail et
+  d'export PDF fiable (l'impression du navigateur est proposée en attendant).
+- Supabase ou Firebase sont proposés comme pistes possibles pour une base
+  partagée; ce ne sont pas des fonctions confirmées.
+
+POINTS À CLARIFIER
+- La devise est présentée comme FCFA dans le guide détaillé, mais comme
+  configurable ou multi-monnaie dans l'autre description.
+- Les rôles, les fonctions de stock et le rapport PDF ne sont pas décrits de
+  façon identique dans les deux textes.
+- Pour toute question sur l'état réel d'une fonction contradictoire, signaler
+  que la documentation fournie n'est pas uniforme au lieu de choisir une
+  version sans preuve.
