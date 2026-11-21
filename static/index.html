@@ -1,9 +1,253 @@
-<html>
-    <head>
-        <title>VS Code Rocks!</title>
-    </head>
-    <body>
-        <h1>VS Code can do that?</h1>
-        <p>Yes it can!</p>
-    </body>
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Assistant ManagePro</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #172033;
+            background: #f5f7fb;
+            font-synthesis: none;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+
+        main {
+            width: min(100%, 820px);
+            height: min(760px, calc(100vh - 48px));
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid #e3e8f0;
+            border-radius: 20px;
+            box-shadow: 0 16px 48px rgb(22 34 58 / 9%);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9edf4;
+        }
+
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .logo {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: #3458db;
+            border-radius: 13px;
+            font-weight: 750;
+        }
+
+        h1 { margin: 0; font-size: 17px; }
+        .subtitle { margin: 3px 0 0; color: #68748a; font-size: 13px; }
+
+        button, textarea { font: inherit; }
+        button {
+            border: 0;
+            cursor: pointer;
+        }
+
+        #new-chat {
+            padding: 9px 12px;
+            color: #46536a;
+            background: #f1f4f9;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        #new-chat:hover { background: #e8edf5; }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            width: fit-content;
+            max-width: min(85%, 620px);
+            margin: 0 0 16px;
+            padding: 12px 15px;
+            border-radius: 15px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .assistant {
+            color: #28334a;
+            background: #f1f4f9;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user {
+            margin-left: auto;
+            color: #fff;
+            background: #3458db;
+            border-bottom-right-radius: 5px;
+        }
+
+        .error { color: #8c2525; background: #fff0ef; }
+
+        form {
+            padding: 16px 20px 12px;
+            border-top: 1px solid #e9edf4;
+        }
+
+        .composer {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            padding: 9px;
+            border: 1px solid #dfe5ef;
+            border-radius: 15px;
+            background: #fff;
+        }
+
+        textarea {
+            flex: 1;
+            min-height: 42px;
+            max-height: 160px;
+            resize: vertical;
+            padding: 10px 8px;
+            border: 0;
+            outline: 0;
+            color: inherit;
+        }
+
+        #send {
+            min-width: 82px;
+            padding: 11px 15px;
+            color: white;
+            background: #3458db;
+            border-radius: 10px;
+            font-weight: 650;
+        }
+
+        #send:disabled { opacity: .55; cursor: wait; }
+        .hint { margin: 9px 4px 0; color: #7a8497; font-size: 12px; text-align: center; }
+
+        @media (max-width: 560px) {
+            body { padding: 0; }
+            main { height: 100vh; min-height: 100vh; border: 0; border-radius: 0; }
+            header { padding: 16px; }
+            #messages { padding: 18px 16px; }
+            form { padding: 12px; }
+            .message { max-width: 92%; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div class="brand">
+                <div class="logo" aria-hidden="true">M</div>
+                <div>
+                    <h1>Assistant ManagePro</h1>
+                    <p class="subtitle">Pose tes questions dans la langue de ton choix</p>
+                </div>
+            </div>
+            <button id="new-chat" type="button">Nouvelle discussion</button>
+        </header>
+
+        <section id="messages" role="log" aria-live="polite" aria-label="Conversation">
+            <div class="message assistant">Bonjour ! Je peux répondre à tes questions sur ManagePro. Tu peux m’écrire dans la langue que tu préfères.</div>
+        </section>
+
+        <form id="chat-form">
+            <div class="composer">
+                <textarea id="question" rows="1" maxlength="8000" aria-label="Ton message" placeholder="Écris ton message..." required></textarea>
+                <button id="send" type="submit">Envoyer</button>
+            </div>
+            <p class="hint">Entrée pour envoyer · Maj + Entrée pour aller à la ligne</p>
+        </form>
+    </main>
+    <script>
+        const messagesElement = document.querySelector("#messages");
+        const form = document.querySelector("#chat-form");
+        const input = document.querySelector("#question");
+        const sendButton = document.querySelector("#send");
+        let history = [];
+
+        function addMessage(text, role, extraClass = "") {
+            const element = document.createElement("div");
+            element.className = `message ${role} ${extraClass}`.trim();
+            element.textContent = text;
+            messagesElement.append(element);
+            messagesElement.scrollTop = messagesElement.scrollHeight;
+            return element;
+        }
+
+        document.querySelector("#new-chat").addEventListener("click", () => {
+            history = [];
+            messagesElement.replaceChildren();
+            addMessage(
+                "Bonjour ! Je peux répondre à tes questions sur ManagePro. Tu peux m’écrire dans la langue que tu préfères.",
+                "assistant"
+            );
+            input.focus();
+        });
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                form.requestSubmit();
+            }
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const question = input.value.trim();
+            if (!question || sendButton.disabled) return;
+
+            addMessage(question, "user");
+            input.value = "";
+            sendButton.disabled = true;
+            sendButton.textContent = "…";
+            const nextHistory = [...history, { role: "user", content: question }];
+            const pending = addMessage("Je prépare une réponse…", "assistant");
+
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ messages: nextHistory })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || "La demande a échoué.");
+                if (typeof result.answer !== "string") throw new Error("Réponse invalide du serveur.");
+                pending.textContent = result.answer;
+                history = [...nextHistory, { role: "assistant", content: result.answer }];
+            } catch (error) {
+                pending.classList.add("error");
+                pending.textContent = `Désolé, une erreur s’est produite : ${error.message}`;
+            } finally {
+                sendButton.disabled = false;
+                sendButton.textContent = "Envoyer";
+                input.focus();
+            }
+        });
+    </script>
+</body>
 </html>
