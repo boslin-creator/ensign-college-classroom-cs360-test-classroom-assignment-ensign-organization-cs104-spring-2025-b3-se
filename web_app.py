@@ -124,7 +124,7 @@ def main():
     server = ThreadingHTTPServer((HOST, PORT), handler)
     local_ip = get_local_ip()
     local_address = f"http://{local_ip}:{PORT}" if local_ip else None
-    print("Assistant ManagePro disponible sur cet ordinateur : "
+    print("Assistant ManagerPRO disponible sur cet ordinateur : "
           f"http://127.0.0.1:{PORT}")
     if local_address:
         print(f"Depuis votre iPhone sur le même Wi-Fi : {local_address}")

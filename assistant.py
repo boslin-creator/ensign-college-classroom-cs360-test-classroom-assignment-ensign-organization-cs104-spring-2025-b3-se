@@ -12,7 +12,7 @@ KNOWLEDGE_FILE = Path(__file__).with_name("managepro_knowledge.txt")
 def load_system_prompt():
     knowledge = KNOWLEDGE_FILE.read_text(encoding="utf-8").strip()
     return (
-        "Tu es l'assistant d'aide de ManagePro. Réponds dans la langue utilisée "
+        "Tu es l'assistant d'aide de ManagerPRO. Réponds dans la langue utilisée "
         "par la personne, quelle qu'elle soit, et peux changer de langue si elle "
         "le demande. Comprends et réponds aussi aux messages mêlant plusieurs "
         "langues. Sois clair et pratique. Appuie-toi sur la documentation ci-dessous. "
@@ -21,7 +21,7 @@ def load_system_prompt():
         "contredisent, signale la différence et demande une précision si nécessaire. "
         "Si tu ne comprends pas assez bien une langue ou une demande, dis-le "
         "honnêtement et demande une reformulation plutôt que de deviner.\n\n"
-        f"Documentation ManagePro :\n{knowledge}"
+        f"Documentation ManagerPRO :\n{knowledge}"
     )
 
 
@@ -73,11 +73,11 @@ def main():
     try:
         system_prompt = load_system_prompt()
     except OSError as error:
-        print(f"Impossible de lire la documentation ManagePro : {error}")
+        print(f"Impossible de lire la documentation ManagerPRO : {error}")
         return 1
 
     messages = []
-    print("Assistant ManagePro prêt. Écris /quit pour quitter.")
+    print("Assistant ManagerPRO prêt. Écris /quit pour quitter.")
     while True:
         try:
             question = input("Vous : ").strip()

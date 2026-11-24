@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f5f7fb">
-    <title>Assistant ManagePro</title>
+    <title>Assistant ManagerPRO</title>
     <style>
         :root {
             color-scheme: light;
@@ -24,6 +24,12 @@
             padding: 24px;
         }
 
+        body.assistant-closed {
+            align-items: end;
+            justify-items: end;
+            background: transparent;
+        }
+
         main {
             width: min(100%, 820px);
             height: min(760px, calc(100vh - 48px));
@@ -35,6 +41,49 @@
             border: 1px solid #e3e8f0;
             border-radius: 20px;
             box-shadow: 0 16px 48px rgb(22 34 58 / 9%);
+        }
+
+        body.assistant-closed main {
+            display: none;
+        }
+
+        #assistant-launcher {
+            display: none;
+            width: 62px;
+            height: 62px;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 100;
+            border-radius: 50%;
+            color: #fff;
+            background: linear-gradient(145deg, #20a66a 0%, #198754 100%);
+            box-shadow: 0 10px 28px rgb(25 135 84 / 30%);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        body.assistant-closed #assistant-launcher {
+            display: flex;
+        }
+
+        #close-assistant {
+            display: none;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #68748a;
+            background: #f1f4f9;
+            font-size: 20px;
+        }
+
+        body:not(.assistant-closed) #close-assistant {
+            display: flex;
         }
 
         header {
@@ -52,10 +101,26 @@
             height: 42px;
             display: grid;
             place-items: center;
+            position: relative;
             color: #fff;
-            background: #3458db;
-            border-radius: 13px;
-            font-weight: 750;
+            background: linear-gradient(145deg, #20a66a 0%, #198754 100%);
+            border-radius: 50%;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            box-shadow: 0 4px 10px rgb(35 126 165 / 18%);
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            left: 10px;
+            right: 9px;
+            bottom: 8px;
+            height: 3px;
+            border-radius: 999px;
+            background: #f4c44e;
+            transform: skewX(-20deg);
         }
 
         h1 { margin: 0; font-size: 17px; }
@@ -104,7 +169,7 @@
         .user {
             margin-left: auto;
             color: #fff;
-            background: #3458db;
+            background: #198754;
             border-bottom-right-radius: 5px;
         }
 
@@ -140,7 +205,7 @@
             min-width: 82px;
             padding: 11px 15px;
             color: white;
-            background: #3458db;
+            background: #198754;
             border-radius: 10px;
             font-weight: 650;
         }
@@ -159,20 +224,24 @@
     </style>
 </head>
 <body>
+    <button id="assistant-launcher" type="button" aria-label="Ouvrir l'assistant ManagerPRO">MP</button>
     <main>
         <header>
             <div class="brand">
-                <div class="logo" aria-hidden="true">M</div>
+                <div class="logo" aria-hidden="true">MP</div>
                 <div>
-                    <h1>Assistant ManagePro</h1>
+                    <h1>Assistant ManagerPRO</h1>
                     <p class="subtitle">Pose tes questions dans la langue de ton choix</p>
                 </div>
             </div>
-            <button id="new-chat" type="button">Nouvelle discussion</button>
+            <div style="display:flex;align-items:center;gap:8px">
+                <button id="new-chat" type="button">Nouvelle discussion</button>
+                <button id="close-assistant" type="button" aria-label="Fermer l'assistant">&times;</button>
+            </div>
         </header>
 
         <section id="messages" role="log" aria-live="polite" aria-label="Conversation">
-            <div class="message assistant">Bonjour ! Je peux répondre à tes questions sur ManagePro. Tu peux m’écrire dans la langue que tu préfères.</div>
+            <div class="message assistant">Bonjour ! Je peux répondre à tes questions sur ManagerPRO. Tu peux m’écrire dans la langue que tu préfères.</div>
         </section>
 
         <form id="chat-form">
@@ -203,9 +272,18 @@
             history = [];
             messagesElement.replaceChildren();
             addMessage(
-                "Bonjour ! Je peux répondre à tes questions sur ManagePro. Tu peux m’écrire dans la langue que tu préfères.",
+                "Bonjour ! Je peux répondre à tes questions sur ManagerPRO. Tu peux m’écrire dans la langue que tu préfères.",
                 "assistant"
             );
+            input.focus();
+        });
+
+        document.querySelector("#close-assistant").addEventListener("click", () => {
+            document.body.classList.add("assistant-closed");
+        });
+
+        document.querySelector("#assistant-launcher").addEventListener("click", () => {
+            document.body.classList.remove("assistant-closed");
             input.focus();
         });
 
