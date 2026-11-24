@@ -1,5 +1,6 @@
 import json
 import os
+import socket
 import webbrowser
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -10,12 +11,21 @@ import requests
 from assistant import DEFAULT_MODEL, load_system_prompt, request_answer
 
 
-HOST = "127.0.0.1"
+HOST = "0.0.0.0"
 PORT = 8000
 MAX_REQUEST_BYTES = 1_000_000
 MAX_MESSAGES = 40
 MAX_MESSAGE_LENGTH = 8_000
 STATIC_DIR = Path(__file__).with_name("static")
+
+
+def get_local_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as connection:
+            connection.connect(("8.8.8.8", 80))
+            return connection.getsockname()[0]
+    except OSError:
+        return None
 
 
 def valid_messages(messages):
@@ -112,10 +122,14 @@ class AssistantRequestHandler(SimpleHTTPRequestHandler):
 def main():
     handler = partial(AssistantRequestHandler, directory=str(STATIC_DIR))
     server = ThreadingHTTPServer((HOST, PORT), handler)
-    address = f"http://{HOST}:{PORT}"
-    print(f"Assistant ManagePro disponible à {address}")
+    local_ip = get_local_ip()
+    local_address = f"http://{local_ip}:{PORT}" if local_ip else None
+    print("Assistant ManagePro disponible sur cet ordinateur : "
+          f"http://127.0.0.1:{PORT}")
+    if local_address:
+        print(f"Depuis votre iPhone sur le même Wi-Fi : {local_address}")
     print("Garde cette fenêtre ouverte. Appuie sur Ctrl+C pour arrêter.")
-    webbrowser.open(address)
+    webbrowser.open(f"http://127.0.0.1:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

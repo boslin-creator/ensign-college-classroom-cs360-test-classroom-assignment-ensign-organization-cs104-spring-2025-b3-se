@@ -27,6 +27,8 @@ $env:ANTHROPIC_API_KEY = "your-key"
 python web_app.py
 ```
 
-The app opens at `http://127.0.0.1:8000`. Keep the terminal window open while
-using it; press `Ctrl+C` there to stop the server. The API key stays in the
-Python process and should not be added to the HTML or committed to the repository.
+The app opens at `http://127.0.0.1:8000` on the computer and is also reachable
+from an iPhone connected to the same Wi-Fi network at the local address printed
+by the server. Keep the terminal window open while using it; press `Ctrl+C`
+there to stop the server. The API key stays in the Python process and should
+not be added to the HTML or committed to the repository.
